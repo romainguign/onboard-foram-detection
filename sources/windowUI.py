@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QPushButton,
+    QStyle,
 )
 
 
@@ -29,7 +30,7 @@ class VideoWindow(QMainWindow):
         self.last_fps_timestamp = time.time()
         self.current_fps = 0.0
 
-        self.setWindowTitle("Video Stream")
+        self.setWindowTitle("Foram detection")
         self.resize(960, 720)
 
         self._build_ui()
@@ -52,7 +53,8 @@ class VideoWindow(QMainWindow):
 
         controls_layout = QHBoxLayout()
 
-        self.play_pause_button = QPushButton("Pause")
+        self.play_pause_button = QPushButton()
+        self.play_pause_button.setIcon(self.style().standardIcon(QStyle.SP_MediaStop))
         self.play_pause_button.clicked.connect(self.toggle_pause)
         controls_layout.addWidget(self.play_pause_button)
 
@@ -85,12 +87,12 @@ class VideoWindow(QMainWindow):
         if self.is_paused:
             self.timer.start(self.interval_ms)
             self.is_paused = False
-            self.play_pause_button.setText("Pause")
+            self.play_pause_button.setIcon(self.style().standardIcon(QStyle.SP_MediaStop))
             self.status_label.setText("Status: Playing")
         else:
             self.timer.stop()
             self.is_paused = True
-            self.play_pause_button.setText("Play")
+            self.play_pause_button.setIcon(self.style().standardIcon(QStyle.SP_MediaPlay))
             self.status_label.setText("Status: Paused")
 
     def update_frame(self):

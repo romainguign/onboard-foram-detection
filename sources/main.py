@@ -8,11 +8,32 @@ from windowUI import VideoWindow
 def main():
     app = QApplication(sys.argv)
 
-    # Development with a file
+    app.setStyleSheet("""
+        QMainWindow {
+            background-color: ##fffafa
+;
+        }
+
+        QLabel {
+            color: black;
+            font-size: 14px;
+        }
+
+        QPushButton {
+            background-color: #1976d2;
+            color: white;
+            border-radius: 6px;
+            padding: 6px 12px;
+        }
+
+        QPushButton:hover {
+            background-color: rgb(25, 118, 210, 0.8);
+        }
+
+    """)
+
     source = FileVideoSource("../data/testvideo.mp4", loop=True)
 
-    # Webcam
-    # source = OpenCVVideoSource(0)
 
     window = VideoWindow(source)
     window.show()
