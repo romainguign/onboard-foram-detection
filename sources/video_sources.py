@@ -155,3 +155,28 @@ class ImageFolderSource(VideoSource):
         if self.interval_seconds <= 0:
             return 1.0
         return 1.0 / self.interval_seconds
+    
+    
+class AnnotatedVideoSource(VideoSource):
+    """Wrap a base source and run detection on each frame."""
+
+    def __init__(self, base_source: VideoSource, detector):
+        self.base_source = base_source
+        self.detector = detector
+
+    def open(self) -> bool:
+        return self.base_source.open()
+
+    def read(self):
+        ret, frame = self.base_source.read()
+        if not ret or frame is None:
+            return False, None
+
+        annotated_frame = self.detector.annotate(frame)
+        return True, annotated_frame
+
+    def release(self) -> None:
+        self.base_source.release()
+
+    def get_fps(self) -> float:
+        return self.base_source.get_fps()
