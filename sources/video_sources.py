@@ -94,17 +94,12 @@ class OpenCVVideoSource(VideoSource):
 
 
 class ImageFolderSource(VideoSource):
-    """
-    Image slideshow source.
-    Loads one image at a time from a folder, optionally runs a detector,
-    and returns the annotated image as a frame.
-    """
+    """Image slideshow source."""
 
     SUPPORTED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 
-    def __init__(self, folder_path: str, detector=None, loop: bool = True, interval_seconds: float = 3.0):
+    def __init__(self, folder_path: str, loop: bool = True, interval_seconds: float = 3.0):
         self.folder_path = Path(folder_path)
-        self.detector = detector
         self.loop = loop
         self.interval_seconds = interval_seconds
 
@@ -137,14 +132,10 @@ class ImageFolderSource(VideoSource):
 
         image_path = self.image_paths[self.index]
         frame = cv2.imread(str(image_path))
-
         self.index += 1
 
         if frame is None:
             return False, None
-
-        if self.detector is not None:
-            frame = self.detector.annotate(frame)
 
         return True, frame
 
@@ -155,10 +146,19 @@ class ImageFolderSource(VideoSource):
         if self.interval_seconds <= 0:
             return 1.0
         return 1.0 / self.interval_seconds
-    
-    
+
+
 class AnnotatedVideoSource(VideoSource):
-    """Wrap a base source and run detection on each frame."""
+    """
+    Wrap a base source and run detection on each frame.
+
+    Returns a dict:
+        {
+            "raw_frame": ...,
+            "display_frame": ...,
+            "detections": [...]
+        }
+    """
 
     def __init__(self, base_source: VideoSource, detector):
         self.base_source = base_source
@@ -172,8 +172,14 @@ class AnnotatedVideoSource(VideoSource):
         if not ret or frame is None:
             return False, None
 
-        annotated_frame = self.detector.annotate(frame)
-        return True, annotated_frame
+        annotated_frame, detections = self.detector.predict(frame)
+
+        payload = {
+            "raw_frame": frame,
+            "display_frame": annotated_frame,
+            "detections": detections,
+        }
+        return True, payload
 
     def release(self) -> None:
         self.base_source.release()

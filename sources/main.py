@@ -4,9 +4,7 @@ from ultralytics import YOLO
 
 from detector import YoloDetector
 from video_sources import FileVideoSource, AnnotatedVideoSource, ImageFolderSource, OpenCVVideoSource
-
 from windowUI import VideoWindow
-
 
 
 def main():
@@ -23,43 +21,41 @@ def main():
         }
 
         QPushButton {
-            # background-color: #1976d2;
-            color: white;
+            color: black;
             border-radius: 6px;
             padding: 6px 12px;
         }
 
         QPushButton:hover {
-            background-color: #1e88e5;
+            background-color: #dceffd;
         }
 
         QPushButton:pressed {
-            background-color: #1565c0;
+            background-color: #c6e2fb;
+        }
+
+        QScrollArea {
+            background-color: white;
+        }
+
+        QComboBox {
+            padding: 4px;
         }
     """)
-    
-    
 
     yolo_model = YOLO("../Models/sharp_living/weights/best.pt")
     detector = YoloDetector(yolo_model)
 
-    
-    
-    # SOURCE OPTIONS:
-    
-    # A video file source 
-    base_source = FileVideoSource("../data/testvideo.mp4", loop=True)
-    
-    # A folder of images source
-    # base_source = ImageFolderSource("../data/images", interval_seconds=3.0)
+    # Video file source
+    # base_source = FileVideoSource("../data/testvideo.mp4", loop=True)
 
-    # A webcam source
+    # Folder of images source
+    base_source = ImageFolderSource("../data/images", interval_seconds=3.0)
+
+    # Webcam source
     # base_source = OpenCVVideoSource(0)
 
-    
     source = AnnotatedVideoSource(base_source, detector)
-    
-    
 
     window = VideoWindow(source)
     window.show()

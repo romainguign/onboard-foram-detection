@@ -2,17 +2,22 @@ import cv2
 
 
 class YoloDetector:
-    """Simple YOLO wrapper returning an annotated frame."""
+    """YOLO wrapper returning an annotated frame and structured detections."""
 
     def __init__(self, model):
         self.model = model
 
-    def annotate(self, frame):
+    def predict(self, frame):
         """
-        Run inference on a BGR OpenCV frame and return an annotated frame.
+        Run inference on a BGR OpenCV frame.
+
+        Returns:
+            annotated_frame: frame with boxes and labels drawn
+            detections: list of dicts
         """
-        results = self.model(frame)
+        results = self.model(frame, verbose=False)
         annotated = frame.copy()
+        detections = []
 
         for result in results:
             boxes = result.boxes
@@ -40,4 +45,13 @@ class YoloDetector:
                     cv2.LINE_AA,
                 )
 
-        return annotated
+                detections.append(
+                    {
+                        "bbox": [int(x1), int(y1), int(x2), int(y2)],
+                        "detected_label": label,
+                        "confidence": conf,
+                        "editable_label": "unknown",
+                    }
+                )
+
+        return annotated, detections
