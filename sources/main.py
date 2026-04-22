@@ -1,7 +1,9 @@
 import sys
 from PySide6.QtWidgets import QApplication
+from ultralytics import YOLO
 
-from video_sources import FileVideoSource, OpenCVVideoSource
+from detector import YoloDetector
+from video_sources import ImageFolderSource
 from windowUI import VideoWindow
 
 
@@ -10,12 +12,11 @@ def main():
 
     app.setStyleSheet("""
         QMainWindow {
-            background-color: ##fffafa
-;
+            background-color: #121212;
         }
 
         QLabel {
-            color: black;
+            color: white;
             font-size: 14px;
         }
 
@@ -27,13 +28,23 @@ def main():
         }
 
         QPushButton:hover {
-            background-color: rgb(25, 118, 210, 0.8);
+            background-color: #1e88e5;
         }
 
+        QPushButton:pressed {
+            background-color: #1565c0;
+        }
     """)
 
-    source = FileVideoSource("../data/testvideo.mp4", loop=True)
+    model = YOLO("../Models/sharp_living/weights/best.pt")
+    detector = YoloDetector(model)
 
+    source = ImageFolderSource(
+        folder_path="../data/images",
+        detector=detector,
+        loop=True,
+        interval_seconds=3.0,
+    )
 
     window = VideoWindow(source)
     window.show()
