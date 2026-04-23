@@ -51,6 +51,9 @@ def main():
         unsure_threshold=0.5,
     )
 
+    # For testing without classification, set classifier to None and it will skip that step
+    # classifier = None
+
     detector = YoloDetector(
         model=yolo_model,
         classifier=classifier,
@@ -58,7 +61,7 @@ def main():
     )
 
     # base_source = FileVideoSource("../data/testvideo.mp4", loop=True)
-    base_source = ImageFolderSource("../data/images", interval_seconds=1.0)
+    base_source = ImageFolderSource("../data/images", interval_seconds=3)
     # base_source = OpenCVVideoSource(0)
 
     source = AnnotatedVideoSource(base_source, detector)

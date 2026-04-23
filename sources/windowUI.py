@@ -87,11 +87,19 @@ class ImagePreviewWindow(QMainWindow):
 class PreviewDetectionItemWidget(QWidget):
     """Widget showing one current crop and an editable species field."""
 
-    def __init__(self, crop_bgr, detection_data, species_options, on_crop_clicked=None):
+    def __init__(
+        self,
+        crop_bgr,
+        detection_data,
+        species_options,
+        on_crop_clicked=None,
+        on_remove_clicked=None,
+    ):
         super().__init__()
         self.detection_data = detection_data
         self.crop_bgr = crop_bgr
         self.on_crop_clicked = on_crop_clicked
+        self.on_remove_clicked = on_remove_clicked
 
         layout = QHBoxLayout(self)
 
@@ -112,12 +120,21 @@ class PreviewDetectionItemWidget(QWidget):
         else:
             self.crop_label.setText("Invalid\ncrop")
 
-        # Make the crop clickable
         self.crop_label.mousePressEvent = self._handle_crop_click
-
         layout.addWidget(self.crop_label)
 
         info_layout = QVBoxLayout()
+
+        top_row = QHBoxLayout()
+
+        self.remove_button = QPushButton("✕")
+        self.remove_button.setFixedSize(36, 36)
+
+        self.remove_button.setToolTip("Remove this crop from preview")
+        self.remove_button.clicked.connect(self._handle_remove_click)
+
+        top_row.addStretch()
+        top_row.addWidget(self.remove_button)
 
         bbox_text = f"BBox: {self.detection_data['bbox']}"
         detected_text = (
@@ -148,12 +165,41 @@ class PreviewDetectionItemWidget(QWidget):
             self.species_combo.addItem(current_species)
             self.species_combo.setCurrentText(current_species)
 
+        info_layout.addLayout(top_row)
         info_layout.addWidget(self.detected_label)
         info_layout.addWidget(self.predicted_label)
         info_layout.addWidget(self.bbox_label)
         info_layout.addWidget(self.species_combo)
 
         layout.addLayout(info_layout)
+
+    def _crop_to_pixmap(self, crop_bgr):
+        if crop_bgr is None or crop_bgr.size == 0:
+            return None
+
+        crop_rgb = cv2.cvtColor(crop_bgr, cv2.COLOR_BGR2RGB)
+        h, w, c = crop_rgb.shape
+        bytes_per_line = c * w
+
+        image = QImage(
+            crop_rgb.data,
+            w,
+            h,
+            bytes_per_line,
+            QImage.Format_RGB888,
+        )
+        return QPixmap.fromImage(image)
+
+    def _handle_crop_click(self, event):
+        if self.on_crop_clicked is not None:
+            self.on_crop_clicked(self.crop_bgr)
+
+    def _handle_remove_click(self):
+        if self.on_remove_clicked is not None:
+            self.on_remove_clicked(self)
+
+    def get_selected_species(self):
+        return sanitize_name(self.species_combo.currentText())
 
     def _crop_to_pixmap(self, crop_bgr):
         if crop_bgr is None or crop_bgr.size == 0:
@@ -501,6 +547,7 @@ class VideoWindow(QMainWindow):
                 det,
                 self.species_options,
                 on_crop_clicked=self.show_selected_crop_preview,
+                on_remove_clicked=self.remove_preview_item,
             )
             self.preview_scroll_layout.addWidget(item_widget)
             self.preview_item_widgets.append(item_widget)
@@ -627,6 +674,23 @@ class VideoWindow(QMainWindow):
         self.image_preview_window.show()
         self.image_preview_window.raise_()
         self.image_preview_window.activateWindow()
+        
+    def remove_preview_item(self, item_widget):
+        """Remove one crop from the current preview."""
+        if item_widget in self.preview_item_widgets:
+            self.preview_item_widgets.remove(item_widget)
+            item_widget.setParent(None)
+            item_widget.deleteLater()
+
+        self.current_preview_count = len(self.preview_item_widgets)
+        self.preview_title_label.setText(f"Current preview ({self.current_preview_count})")
+
+        if self.preview_item_widgets:
+            self.show_selected_crop_preview(self.preview_item_widgets[0].crop_bgr)
+        else:
+            self.selected_crop_preview.setText("Click a crop to preview it")
+            self.selected_crop_preview.setPixmap(QPixmap())
+            self.selected_crop_bgr = None
 
     def resizeEvent(self, event):
         """Handle window resize events."""
