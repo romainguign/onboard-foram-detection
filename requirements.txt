@@ -1,0 +1,8 @@
+opencv-python
+PySide6
+ultralytics
+onnxruntime
+numpy
+pandas
+tqdm
+tensorflow

@@ -61,7 +61,7 @@ def main():
     )
 
     # base_source = FileVideoSource("../data/testvideo.mp4", loop=True)
-    base_source = ImageFolderSource("../data/images", interval_seconds=3)
+    base_source = ImageFolderSource("../data/images", interval_seconds=0.5)
     # base_source = OpenCVVideoSource(0)
 
     source = AnnotatedVideoSource(base_source, detector)
