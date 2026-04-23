@@ -1,7 +1,6 @@
 *.pyc
 Models/*
-images/*
+data/images/*
 testvideo.mp4
 runs/
 datasets/*
-
