@@ -2,6 +2,7 @@ import sys
 from PySide6.QtWidgets import QApplication
 from ultralytics import YOLO
 
+from classifier import ForamClassifier
 from detector import YoloDetector
 from video_sources import FileVideoSource, AnnotatedVideoSource, ImageFolderSource, OpenCVVideoSource
 from windowUI import VideoWindow
@@ -43,16 +44,21 @@ def main():
         }
     """)
 
-    yolo_model = YOLO("../Models/sharp_living/weights/best.pt")
-    detector = YoloDetector(yolo_model)
+    yolo_model = YOLO("../Models/Detection/sharp_living/weights/best.pt")
 
-    # Video file source
+    classifier = ForamClassifier(
+        model_info_path="../Models/Classification/model_onnx/network_info.xml",
+        unsure_threshold=0.5,
+    )
+
+    detector = YoloDetector(
+        model=yolo_model,
+        classifier=classifier,
+        crop_margin=4,
+    )
+
     # base_source = FileVideoSource("../data/testvideo.mp4", loop=True)
-
-    # Folder of images source
-    base_source = ImageFolderSource("../data/images", interval_seconds=3.0)
-
-    # Webcam source
+    base_source = ImageFolderSource("../data/images", interval_seconds=1.0)
     # base_source = OpenCVVideoSource(0)
 
     source = AnnotatedVideoSource(base_source, detector)

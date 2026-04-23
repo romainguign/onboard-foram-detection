@@ -1,55 +1,87 @@
 [
   {
     "id": "frame_000001_det_000",
-    "timestamp": "2026-04-22T17:43:09",
+    "timestamp": "2026-04-23T14:06:09",
     "frame_id": "frame_000001",
     "crop_file": "dataset/crops/frame_000001_det_000.png",
     "annotated_frame_file": "dataset/frames/frame_000001_annotated.png",
     "bbox": [
-      928,
-      165,
-      1117,
-      319
+      860,
+      294,
+      1028,
+      468
     ],
     "detected_label": "forams_all",
-    "confidence": 0.9825376868247986,
+    "confidence": 0.972184956073761,
     "editable_label": "unknown"
   },
   {
     "id": "frame_000001_det_001",
-    "timestamp": "2026-04-22T17:43:09",
+    "timestamp": "2026-04-23T14:06:09",
     "frame_id": "frame_000001",
     "crop_file": "dataset/crops/frame_000001_det_001.png",
     "annotated_frame_file": "dataset/frames/frame_000001_annotated.png",
     "bbox": [
-      1088,
-      577,
-      1291,
-      873
+      897,
+      731,
+      1075,
+      902
     ],
     "detected_label": "forams_all",
-    "confidence": 0.8309032320976257,
+    "confidence": 0.9549672603607178,
     "editable_label": "unknown"
   },
   {
     "id": "frame_000001_det_002",
-    "timestamp": "2026-04-22T17:43:09",
+    "timestamp": "2026-04-23T14:06:09",
     "frame_id": "frame_000001",
     "crop_file": "dataset/crops/frame_000001_det_002.png",
     "annotated_frame_file": "dataset/frames/frame_000001_annotated.png",
     "bbox": [
-      1218,
-      183,
-      1290,
-      333
+      1231,
+      702,
+      1292,
+      872
     ],
     "detected_label": "forams_all",
-    "confidence": 0.744251549243927,
+    "confidence": 0.7234730124473572,
+    "editable_label": "unknown"
+  },
+  {
+    "id": "frame_000001_det_003",
+    "timestamp": "2026-04-23T14:06:09",
+    "frame_id": "frame_000001",
+    "crop_file": "dataset/crops/frame_000001_det_003.png",
+    "annotated_frame_file": "dataset/frames/frame_000001_annotated.png",
+    "bbox": [
+      915,
+      0,
+      1071,
+      96
+    ],
+    "detected_label": "forams_all",
+    "confidence": 0.40299609303474426,
+    "editable_label": "unknown"
+  },
+  {
+    "id": "frame_000001_det_004",
+    "timestamp": "2026-04-23T14:06:09",
+    "frame_id": "frame_000001",
+    "crop_file": "dataset/crops/frame_000001_det_004.png",
+    "annotated_frame_file": "dataset/frames/frame_000001_annotated.png",
+    "bbox": [
+      1276,
+      276,
+      1292,
+      401
+    ],
+    "detected_label": "forams_all",
+    "confidence": 0.2525366544723511,
     "editable_label": "unknown"
   },
   {
     "id": "frame_000001_det_000",
-    "timestamp": "2026-04-22T17:48:13",
+    "timestamp": "2026-04-23T14:14:23",
     "frame_id": "frame_000001",
     "crop_file": "dataset/crops/frame_000001_det_000.png",
     "annotated_frame_file": "dataset/frames/frame_000001_annotated.png",
@@ -61,11 +93,11 @@
     ],
     "detected_label": "forams_all",
     "confidence": 0.9444538354873657,
-    "editable_label": "unknown"
+    "editable_label": "Psammosphaera"
   },
   {
     "id": "frame_000001_det_001",
-    "timestamp": "2026-04-22T17:48:13",
+    "timestamp": "2026-04-23T14:14:23",
     "frame_id": "frame_000001",
     "crop_file": "dataset/crops/frame_000001_det_001.png",
     "annotated_frame_file": "dataset/frames/frame_000001_annotated.png",
@@ -77,11 +109,11 @@
     ],
     "detected_label": "forams_all",
     "confidence": 0.25823116302490234,
-    "editable_label": "unknown"
+    "editable_label": "Psammosphaera"
   },
   {
     "id": "frame_000001_det_002",
-    "timestamp": "2026-04-22T17:48:13",
+    "timestamp": "2026-04-23T14:14:23",
     "frame_id": "frame_000001",
     "crop_file": "dataset/crops/frame_000001_det_002.png",
     "annotated_frame_file": "dataset/frames/frame_000001_annotated.png",
@@ -93,6 +125,6 @@
     ],
     "detected_label": "forams_all",
     "confidence": 0.2565562129020691,
-    "editable_label": "unknown"
+    "editable_label": "particules"
   }
 ]
